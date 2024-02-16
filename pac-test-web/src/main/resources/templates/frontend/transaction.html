@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html layout:decorate="~{fragments/layout}">
+
+<head>
+	<title>Transaction</title>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<center>
+			<h1>TRANSACTION</h1>
+		</center>
+
+		<!--MODAL-->
+		<div class="modal" id="modalBalance" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Modal title</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--MODAL-->
+
+		<br>
+		<button type="button" class="btn btn-primary btn-lg btn-block" onclick="f_tarik(value)">Tarik Tunai</button>
+		<br>
+		<button type="button" class="btn btn-secondary btn-lg btn-block" onclick="f_setor(value)">Setor Tunai</button>
+		<br>
+		<button type="button" class="btn btn-success btn-lg btn-block">Transfer</button>
+
+
+		<script>
+			function f_tarik(value) {
+				var body = '<div class="form-group">'
+				body += '<label>PHONE NUMBER</label>'
+				body += '<input id="phone" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="form-group">'
+				body += '<label>BALANCE</label>'
+				body += '<input id="balance" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="modal-footer">'
+				body += '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>'
+				body += '<button id="btnSave" type="button" class="btn btn-primary">Save changes</button>'
+				body += '</div>'
+
+				$(".modal-title").html("Tarik Tunai")
+				$(".modal-body").html(body)
+				$("#btnSave").html("Submit").off("click").on("click", function () {f_cekPin(value)})
+				$("#modalBalance").modal("toggle")
+			}
+
+			function f_cekPin(value) {
+				var phone = $("#phone").val()
+				var saldo = $("#balance").val()
+				console.log(phone + " --- " + saldo)
+
+				var body = '<div class="form-group">'
+				body += '<label>PIN</label>'
+				body += '<input id="pin" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="modal-footer">'
+				body += '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>'
+				body += '<button id="btnSave" type="button" class="btn btn-primary">Save changes</button>'
+				body += '</div>'
+
+				$(".modal-title").html("Tarik Tunai")
+				$(".modal-body").html(body)
+				$("#btnSave").html("Submit").off("click").on("click", function () {simpanTarikTunai(phone, saldo)})
+				$("#modalBalance").modal("show")
+
+
+			}
+
+			function simpanTarikTunai(phone, saldo) {
+				var pinAtm = $("#pin").val()
+				console.log(pinAtm)
+				console.log(phone + " --- " + saldo)
+				dataTarik = {
+					phoneNumber: phone,
+					balance: saldo,
+					pin: pinAtm
+				}
+
+				var dataTarikJson = JSON.stringify(dataTarik)
+				$.ajax({
+					url: '/atm/tariktunai',
+					data: dataTarikJson,
+					type: 'post',
+					contentType: 'application/json',
+					success: function (response) {
+						var body = '<p>Selamat anda telah berhasil melakukan transaksi tarik tunai, sisa saldo anda ' + response.balance + '</p>'
+
+						console.log(response)
+						console.log(response.balance)
+						$(".modal-title").html("Tarik Tunai")
+						$(".modal-body").html(body)
+						$("#modalBalance").modal("show")
+					}
+
+				})
+
+			}
+			
+			function f_setor(value) {
+				var body = '<div class="form-group">'
+				body += '<label>PHONE NUMBER</label>'
+				body += '<input id="phone" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="form-group">'
+				body += '<label>BALANCE</label>'
+				body += '<input id="balance" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="modal-footer">'
+				body += '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>'
+				body += '<button id="btnSave" type="button" class="btn btn-primary">Save changes</button>'
+				body += '</div>'
+
+				$(".modal-title").html("Setor Tunai")
+				$(".modal-body").html(body)
+				$("#btnSave").html("Submit").off("click").on("click", function () {cekPin(value)})
+				$("#modalBalance").modal("toggle")
+			}
+			
+			function cekPin(value) {
+				var phone = $("#phone").val()
+				var saldo = $("#balance").val()
+				console.log(phone + " --- " + saldo)
+
+				var body = '<div class="form-group">'
+				body += '<label>PIN</label>'
+				body += '<input id="pin" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="modal-footer">'
+				body += '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>'
+				body += '<button id="btnSave" type="button" class="btn btn-primary">Save changes</button>'
+				body += '</div>'
+
+				$(".modal-title").html("Setor Tunai")
+				$(".modal-body").html(body)
+				$("#btnSave").html("Submit").off("click").on("click", function () {simpanSetorTunai(phone, saldo)})
+				$("#modalBalance").modal("show")
+
+			}
+			
+			
+			function simpanSetorTunai(phone, saldo) {
+				var pinAtm = $("#pin").val()
+				console.log(pinAtm)
+				console.log(phone + " --- " + saldo)
+				dataTarik = {
+					phoneNumber: phone,
+					balance: saldo,
+					pin: pinAtm
+				}
+
+				var dataTarikJson = JSON.stringify(dataTarik)
+				$.ajax({
+					url: '/atm/setortunai',
+					data: dataTarikJson,
+					type: 'post',
+					contentType: 'application/json',
+					success: function (response) {
+						var body = '<p>Selamat anda telah berhasil melakukan transaksi setor tunai, sisa saldo anda ' + response.balance + '</p>'
+
+						console.log(response)
+						console.log(response.balance)
+						$(".modal-title").html("Setor Tunai")
+						$(".modal-body").html(body)
+						$("#modalBalance").modal("show")
+					}
+
+				})
+
+			}
+		</script>
+	</div>
+</body>

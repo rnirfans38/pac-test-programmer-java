@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html layout:decorate="~{fragments/layout}">
+
+<head>
+	<title>Balance Information</title>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<center>
+			<h1>BALANCE INFORMATION</h1>
+		</center>
+		<!--MODAL-->
+		<div class="modal" id="modalBalance" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Modal title</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--MODAL-->
+
+		<!--Button cari-->
+		<div class="col-1 col-md-8 col-sm-8 text-end">
+			<button type="button" class="btn btn-primary" onclick="f_cari(value)">Balance Information</button>
+		</div>
+		<!--Button cari-->
+
+
+		<!--Java Script-->
+		<script>
+			function f_cari(value) {
+				var body = '<div class="form-group">'
+				body += '<label>PHONE NUMBER</label>'
+				body += '<input id="phone" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="form-group">'
+				body += '<label>PIN</label>'
+				body += '<input id="pin" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="modal-footer">'
+				body += '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>'
+				body += '<button id="btnSave" type="button" class="btn btn-primary">Save changes</button>'
+				body += '</div>'
+
+				$(".modal-title").html("Information Balance")
+				$(".modal-body").html(body)
+				$("#btnSave").html("Submit").off("click").on("click", function(){balanceInformation(value)})
+				$("#modalBalance").modal("toggle")
+			}
+
+
+			function balanceInformation(value) {
+				var phoneNumber = $("#phone").val()
+				var pin = $("#pin").val()
+				console.log(phoneNumber + " --- " + pin)
+
+				$.ajax({
+					url: '/atm/ceksaldo?phoneNumber=' + phoneNumber + '&pin=' + pin,
+					type: 'get',
+					contentType: 'application/json',
+					success: function (response) {
+						var body = '<p>Saldo anda sebanyak Rp. ' + response.balance + '</p>'
+						
+						console.log(response)
+						console.log(response.balance)
+						$(".modal-title").html("Information Balance")
+						$(".modal-body").html(body)
+						$("#modalBalance").modal("show")
+					}
+
+				})
+			}
+
+
+		</script>
+
+
+	</div>
+</body>
+
+</html>

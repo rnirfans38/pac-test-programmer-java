@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html layout:decorate="~{fragments/layout}">
+
+<head>
+	<title>Homepage</title>
+</head>
+
+<body>
+	<div layout:fragment="content">
+
+
+		<style>
+			.accordion {
+				background-color: #eee;
+				color: #444;
+				cursor: pointer;
+				padding: 18px;
+				width: 100%;
+				border: none;
+				text-align: left;
+				outline: none;
+				font-size: 15px;
+				transition: 0.4s;
+			}
+
+			.active,
+			.accordion:hover {
+				background-color: #ccc;
+			}
+
+			.panel {
+				padding: 0 18px;
+				display: none;
+				background-color: white;
+				overflow: hidden;
+			}
+		</style>
+
+
+
+
+		<center>
+			<h1>HOMEPAGE ATM</h1>
+		</center>
+
+		<br>
+
+		<center>
+			<h4>Welcome customers, please........ Can I help you?</h4>
+		</center>
+
+		<br>
+
+		<center>
+			<b>Instructions for use</b>
+		</center>
+		
+		<br>
+		
+		<button class="accordion">Register</button>
+		<div class="panel">
+			<p>If you don't have an ATM account, you must register first in the sidebar on your left by pressing the register button.</p>
+		</div>
+		<button class="accordion">Balance Information</button>
+		<div class="panel">
+			<p>Customers who have registered and have an account can check the latest balance information. 
+				By clicking the balance information icon in the sidebar.</p>
+		</div>
+		<button class="accordion">Transaction</button>
+		<div class="panel">
+			<p>Transaction menu, where customers want to withdraw cash, deposit cash or transfer. By clicking the transaction icon in the sidebar</p>
+		</div>
+		<button class="accordion">History Saldo</button>
+		<div class="panel">
+			<p>Balance History, is a history of every transaction carried out by each customer. If customers want to see, they can click on the balance history icon in the sidebar.</p>
+		</div>
+
+
+		<!--Java Script-->
+
+		<script>
+			var acc = document.getElementsByClassName("accordion");
+			var i;
+
+			for (i = 0; i < acc.length; i++) {
+				acc[i].addEventListener("click", function () {
+					this.classList.toggle("active");
+					var panel = this.nextElementSibling;
+					if (panel.style.display === "block") {
+						panel.style.display = "none";
+					} else {
+						panel.style.display = "block";
+					}
+				});
+			}
+		</script>
+
+
+	</div>
+</body>
+
+</html>
