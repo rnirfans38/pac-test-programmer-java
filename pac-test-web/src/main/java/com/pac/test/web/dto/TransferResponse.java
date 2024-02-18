@@ -6,4 +6,6 @@ public class TransferResponse {
 	public String massage;
 	
 	public Integer balance;
+	
+	public Integer amount;
 }

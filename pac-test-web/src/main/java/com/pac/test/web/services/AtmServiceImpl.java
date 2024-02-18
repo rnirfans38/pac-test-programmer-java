@@ -1,6 +1,7 @@
 package com.pac.test.web.services;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +105,7 @@ public class AtmServiceImpl implements AtmService {
 			transaction.setTransactionType("Tarik Tunai"); // belum ada
 			transaction.setDebitKredit("Debit"); // perlu logic
 			transaction.setPreviousBalance(balanceAwal);
-			transaction.setAmount(1); // masih bingung
+			transaction.setAmount(transactionRequest.getBalance()); // masih bingung
 			transaction.setCreatedOn(LocalDate.now());
 
 			// save ke transactions
@@ -148,7 +149,7 @@ public class AtmServiceImpl implements AtmService {
 			transaction.setTransactionType("Setor Tunai"); // belum ada
 			transaction.setDebitKredit("Kredit"); // perlu logic
 			transaction.setPreviousBalance(balanceAwal);
-			transaction.setAmount(1); // masih bingung
+			transaction.setAmount(transactionRequest.getBalance()); // masih bingung
 			transaction.setCreatedOn(LocalDate.now());
 
 			// save ke transactions
@@ -182,7 +183,7 @@ public class AtmServiceImpl implements AtmService {
 		
 		TransferResponse response = new TransferResponse();
 		if(cekPhoneDestination.getPhoneNumber() == null) {
-			response.massage = "Destination invalid";
+			response.massage = "Destination Invalid";
 			return response;
 		}
 		
@@ -202,6 +203,7 @@ public class AtmServiceImpl implements AtmService {
 			transaction.setPreviousBalance(balanceAwal);
 			transaction.setAmount(transferRequest.balance); // masih bingung
 			transaction.setCreatedOn(LocalDate.now());
+			transaction.setAccountNumberDestination(transferRequest.getPhoneNumberDestination());
 	
 			// save ke transactions
 			Transaction addTransaction = this.transactionRepository.save(transaction);
@@ -248,10 +250,20 @@ public class AtmServiceImpl implements AtmService {
 			response.massage = "Success";
 			return response;
 		} else {
-			response.massage = "Pin invalid";
+			response.massage = "Pin Invalid";
 			return response;
 		}
 	}
 	
-
+	@Override
+	public List<Transaction> transaction(String accountNumber, Integer pin) {
+		//kirim parameter dari fe di be amvil parameter masuk ke repo buat nyari
+		List<Transaction> getTransaction = this.transactionRepository.transaction(accountNumber, pin);
+		
+		//Transaction transferRespon = mapper.mapper(getTransaction, new TypeToken<Transaction>() {
+		//}.getType());
+		
+		return getTransaction;
+	}
+	 
 }

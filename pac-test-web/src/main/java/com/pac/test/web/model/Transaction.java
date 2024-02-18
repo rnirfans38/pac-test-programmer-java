@@ -21,6 +21,9 @@ public class Transaction {
 
 	@Column(name = "account_number")
 	public String accountNumber;
+	
+	@Column(name = "account_number_destination")
+	public String accountNumberDestination;
 
 	@Column(name = "balance")
 	public Integer balance;
@@ -72,6 +75,14 @@ public class Transaction {
 
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
+	}
+
+	public String getAccountNumberDestination() {
+		return accountNumberDestination;
+	}
+
+	public void setAccountNumberDestination(String accountNumberDestination) {
+		this.accountNumberDestination = accountNumberDestination;
 	}
 
 	public Integer getBalance() {
@@ -170,6 +181,7 @@ public class Transaction {
 		this.isDelete = isDelete;
 	}
 
+	
 	
 	
 

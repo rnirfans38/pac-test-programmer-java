@@ -32,5 +32,11 @@ public class ViewController {
 		ModelAndView view = new ModelAndView("frontend/transaction.html");
 		return view;
 	}
+	
+	@GetMapping("transactionhistory")
+	public ModelAndView transactionhistory() {
+		ModelAndView view = new ModelAndView("frontend/historytransaction.html");
+		return view;
+	}
 
 }

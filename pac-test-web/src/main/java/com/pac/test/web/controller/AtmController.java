@@ -1,5 +1,7 @@
 package com.pac.test.web.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +19,8 @@ import com.pac.test.web.dto.TransactionResponse;
 import com.pac.test.web.dto.TransferRequest;
 import com.pac.test.web.dto.TransferResponse;
 import com.pac.test.web.model.CekSaldo;
+import com.pac.test.web.model.Transaction;
 import com.pac.test.web.services.AtmService;
-
-import ch.qos.logback.core.encoder.JsonEscapeUtil;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.pac.test.web.dto.ErrorResponse;
 
 @RestController
 @RequestMapping("/atm/")
@@ -113,6 +110,16 @@ public class AtmController {
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("transactionhistory")
+	public ResponseEntity <List<Transaction>> gethistory(@RequestParam String accountNumber, @RequestParam Integer pin) {
+		try {
+			List<Transaction> transactionResponse = atmService.transaction(accountNumber, pin);
+			return new ResponseEntity<>(transactionResponse, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

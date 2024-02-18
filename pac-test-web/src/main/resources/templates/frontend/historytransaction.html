@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html layout:decorate="~{fragments/layout}">
+
+<head>
+	<title>Homepage</title>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<center>
+			<h1>HISTORY TRANSACTION</h1>
+		</center>
+
+		<!--MODAL-->
+		<div class="modal" id="modalBalance" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Modal title</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--MODAL-->
+		<br>
+
+		<button type="button" class="btn btn-danger btn-lg btn-block" onclick="f_history()">Transaction History</button>
+
+		<br>
+		<div id="isiHistory"></div>
+
+		<script>
+			function f_history() {
+				var body = '<div class="form-group">'
+				body += '<label>PHONE NUMBER</label>'
+				body += '<input id="phone" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="form-group">'
+				body += '<label>PIN</label>'
+				body += '<input id="pin" type="text" class="form-control">'
+				body += '</div>'
+				body += '<div class="modal-footer">'
+				body += '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>'
+				body += '<button id="btnSave" type="button" class="btn btn-primary">Save changes</button>'
+				body += '</div>'
+
+				$(".modal-title").html("Transaction History")
+				$(".modal-body").html(body)
+				$("#btnSave").html("Submit").off("click").on("click", function () {cekHistory()})
+				$("#modalBalance").modal("toggle")
+			}
+
+			function cekHistory() {
+				var phone = $("#phone").val()
+				var pin = $("#pin").val()
+				console.log(phone + " --- " + pin)
+
+				$.ajax({
+					url: '/atm/transactionhistory?accountNumber=' + phone + '&pin=' + pin,
+					type: 'get',
+					contentType: 'application/json',
+					success: function (response) {
+						$("#modalBalance").modal("toggle")
+						var body = '<div>'
+						body += '<table class="table table-bordered col-12" border="2">'
+						body += '<thead class="thead-light">'
+						body += '<tr class="border-primary">'
+						body += '<th class="col-1 text-center text-black">NO</th>'
+						body += '<th class="col-2 text-center">TANGGAL</th>'
+						body += '<th class="col-2 text-center">TRANSAKSI</th>'
+						body += '<th class="col-2 text-center">NOMINAL</th>'
+						body += '<th class="col-2 text-center">DEBIT/KREDIT</th>'
+						body += '<th class="col-2 text-center">SALDO</th>'
+						body += '</tr>'
+						body += '</thead>'
+						body += '<tbody>'
+						for (var i = 0; i < response.length; i++) {
+							var no = (i + 1)
+							body += '<tr class="text-center border-danger">'
+							body += '<td>' + no + '</td>'
+							body += '<td>' + response[i].createdOn + '</td>'
+							body += '<td>' + response[i].transactionType + '</td>'
+							body += '<td>' + response[i].amount + '</td>'
+							body += '<td>' + response[i].debitKredit + '</td>'
+							body += '<td>' + response[i].balance + '</td>'
+							body += '</tr>'
+						}
+						body += '</tbody>'
+						body += '</table>'
+						body += '</div>'
+
+						console.log(response)
+					
+						$("#isiHistory").empty()
+						$("#isiHistory").html(body)
+
+					}
+
+				})
+			}
+		</script>
+
+
+	</div>
+</body>
+
+</html>
